@@ -16,7 +16,10 @@
     "express-handlebars": "^4.0.4",
     "express-session": "^1.15.6",
     "mongoose": "^5.9.23",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "pg": "^8.2.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": ">=5.3.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
