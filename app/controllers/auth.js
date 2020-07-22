@@ -25,14 +25,16 @@ router.get('/callback/github', async (req, res) => {
   const github = new GitHub({ clientId: config.githubClientId, clientSecret: config.githubClientSecret });
   const accessToken = await github.getToken(req.query.code);
 
-  if (!accessToken) {
-    return res.render('404');
+  console.log("Access token: " + access_token);
+
+  if (!access_token) {
+    return res.render("404");
   }
 
-  const user = await models.User.find_or_create_from_token(accessToken);
+  // const user = await models.User.find_or_create_from_token(access_token);
 
-  req.session.access_token = accessToken;
-  req.session.user = user;
+  req.session.access_token = access_token;
+  // req.session.user = user;
 
   return res.redirect('/');
 });
