@@ -1,6 +1,7 @@
 const passport = require('passport');
 const refresh = require('passport-oauth2-refresh');
 const axios = require('axios');
+const GitHub = require("../services/github");
 const { Strategy: GitHubStrategy } = require('passport-github2');
 const { Strategy: OpenIDStrategy } = require('passport-openid');
 const { OAuthStrategy } = require('passport-oauth');

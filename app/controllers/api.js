@@ -1,3 +1,5 @@
+const GitHub = require("../services/github");
+
 exports.getGithub = async (req, res, next) => {
     const github = new Octokit();
     try {
