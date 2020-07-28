@@ -1,5 +1,6 @@
 const GitHub = require("../services/github");
 
+
 // module.exports = (sequelize, DataTypes) => {
 //   const User = sequelize.define(
 //     "User",
@@ -44,7 +45,7 @@ var UserSchema = new Schema({
   email: { type: String, unique: true },
   password: String,
   github: String,
-  
+
   profile: {
     name: String,
     gender: String,

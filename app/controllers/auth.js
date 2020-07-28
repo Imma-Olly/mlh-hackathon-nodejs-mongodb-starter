@@ -1,12 +1,12 @@
-const express = require('express');
-
+const express = require("express");
 const models = require("../models");
 const config = require("../../config");
 const GitHub = require("../services/github");
 const controllers = require("../controllers");
 const router = express.Router();
 
-router.get('/logout', (req, res) => {
+
+router.get("/logout", function(req, res) {
   req.session.destroy();
   res.redirect('/');
 });
@@ -34,7 +34,7 @@ router.get('/callback/github', async (req, res) => {
   // const user = await models.User.find_or_create_from_token(access_token);
 
   req.session.access_token = access_token;
-  // req.session.user = user;
+ // req.session.user = user;
 
   return res.redirect('/');
 });
