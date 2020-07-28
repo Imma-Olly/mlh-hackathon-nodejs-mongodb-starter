@@ -1,4 +1,4 @@
-// const GitHub = require("../services/github");
+const GitHub = require("../services/github");
 
 // module.exports = (sequelize, DataTypes) => {
 //   const User = sequelize.define(
@@ -34,17 +34,51 @@
 
 //   return User;
 // };
-
-var mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-  email: String,
-  firstName: String,
-  lastName: String,
-  passwordHash: String,
-  passwordSalt: String
+  email: { type: String, unique: true },
+  password: String,
+  github: String,
+  
+  profile: {
+    name: String,
+    gender: String,
+    location: String
+  }
+}, { timestamps: true });
+
+/**
+ * Password hash middleware.
+ */
+userSchema.pre('save', function save(next) {
+  const user = this;
+  if (!user.isModified('password')) { return next(); }
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) { return next(err); }
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      if (err) { return next(err); }
+      user.password = hash;
+      next();
+    });
+  });
 });
 
-module.exports = mongoose.model('User', UserSchema);
+/**
+ * Helper method for validating user's password.
+ */
+userSchema.methods.comparePassword = function comparePassword(candidatePassword, cb) {
+  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+    cb(err, isMatch);
+  });
+};
+
+
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
