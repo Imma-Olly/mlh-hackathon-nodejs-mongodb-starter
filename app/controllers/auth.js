@@ -31,10 +31,10 @@ router.get('/callback/github', async (req, res) => {
     return res.render("404");
   }
 
-  // const user = await models.User.find_or_create_from_token(access_token);
+ const user = await models.userSchema.statics.findOneOrCreate(access_token);
 
   req.session.access_token = access_token;
- // req.session.user = user;
+  req.session.user = user;
 
   return res.redirect('/');
 });
