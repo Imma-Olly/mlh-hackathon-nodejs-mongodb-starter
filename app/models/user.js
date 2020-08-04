@@ -38,13 +38,15 @@ const GitHub = require("../services/github");
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
-
+//const findOrCreate = require('mongoose-find-or-create')
+var findOrCreate = require('mongoose-findorcreate')
 var Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+var UserSchema = new Schema({
   username: { type: String, unique: true },
   avatar_url: String,
   github_id: String,
+  access_token: String,
 
   profile: {
     name: String,
@@ -53,28 +55,27 @@ const userSchema = new Schema({
   }
 }, { timestamps: true });
 
-//Instance I created to replace the former.
 
-// userSchema.statics.findOneOrCreate = function findOneOrCreate(condition, doc) {
-//   const self = this;
-//   const newDocument = doc;
-//   return new Promise((resolve, reject) => {
-//   return self.findOne(condition)
-//   .then((result) => {
-//   if (result) {
-//   return resolve(result);
-//   }
-//   return self.create(newDocument)
-//   .then((result) => {
-//   return resolve(result);
-//   }).catch((error) => {
-//   return reject(error);
-//   })
-//   }).catch((error) => {
-//   return reject(error);
-//   })
-//   });
-//  };
+module.exports = User = mongoose.model('User', UserSchema);
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+const User = mongoose.model('users', userSchema);
+User.find_or_create_from_token = async (access_token) => {
+  const user = await Github.findById(access_token);
+  if (!user) {
+    User.create({ name: 'username' }, 
+    {_id:  'github_id'}, 
+    {token: 'access_token'}, 
+    {_url: 'avatar_url'}, function (err) {
+      if (err) return handleError(err);
+      // saved!
+    });
+  }
+};
+
+
+// userSchema.statics.findUser = async function (access_token) {
+//   const data = await GitHub.get_user_from_token(access_token);
+//   const user = await this.findOne({username, github_id:{}});
+//   return !!user;
+
+// };
