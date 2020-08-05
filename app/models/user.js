@@ -66,8 +66,8 @@ User.find_or_create_from_token = async (access_token) => {
     {_id:  'github_id'}, 
     {token: 'access_token'}, 
     {_url: 'avatar_url'}, function (err) {
-      if (err) return handleError(err);
-      // saved!
+      if (err) 
+      return handleError(err);
     });
   }
 };
