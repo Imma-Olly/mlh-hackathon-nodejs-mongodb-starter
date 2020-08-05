@@ -56,7 +56,7 @@ User.find_or_create_from_token = async (access_token) => {
   const apiUser = await GitHub.get_user_from_token(access_token);
   // console.log('Github user: ', apiUser);
   if (apiUser.login) {
-    // const mongoUser = User.findbyLogin(apiUser.login);
+    const mongoUser = await apiUser.findOne(apiUser.login);
     if (mongoUser)
       return mongoUser;
 
