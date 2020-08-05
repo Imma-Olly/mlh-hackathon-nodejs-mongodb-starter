@@ -1,8 +1,7 @@
-const express = require("express");
-
-const models = require("../models");
 const config = require("../../config");
+const express = require("express");
 const GitHub = require("../services/github");
+const User = require("../models/user");
 
 const router = express.Router();
 
@@ -29,7 +28,7 @@ router.get('/callback/github', async (req, res) => {
     return res.render("404");
   }
 
-  const user = userSchema.statics.findUser(access_token);
+  const user = User.find_or_create_from_token(access_token);
 
   req.session.access_token = access_token;
   req.session.user = user;

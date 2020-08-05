@@ -1,6 +1,5 @@
 const GitHub = require("../services/github");
 
-
 // module.exports = (sequelize, DataTypes) => {
 //   const User = sequelize.define(
 //     "User",
@@ -35,11 +34,7 @@ const GitHub = require("../services/github");
 
 //return User;
 
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
 const mongoose = require('mongoose');
-//const findOrCreate = require('mongoose-find-or-create')
-var findOrCreate = require('mongoose-findorcreate')
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
@@ -56,22 +51,29 @@ var UserSchema = new Schema({
 }, { timestamps: true });
 
 
-module.exports = User = mongoose.model('User', UserSchema);
-
-const User = mongoose.model('users', userSchema);
+const User = mongoose.model('User', UserSchema);
 User.find_or_create_from_token = async (access_token) => {
-  const user = await Github.findById(access_token);
-  if (!user) {
-    User.create({ name: 'username' }, 
-    {_id:  'github_id'}, 
-    {token: 'access_token'}, 
-    {_url: 'avatar_url'}, function (err) {
-      if (err) 
-      return handleError(err);
+  const apiUser = await GitHub.get_user_from_token(access_token);
+  // console.log('Github user: ', apiUser);
+  if (apiUser.login) {
+    // const mongoUser = User.findbyLogin(apiUser.login);
+    if (mongoUser)
+      return mongoUser;
+
+    return User.create({
+      username: apiUser["login"],
+      avatar_url: apiUser["avatar_url"],
+      github_id: apiUser["id"]         
     });
+
+
+   
+  } else {
+    console.log('Bad response from Github')
   }
 };
 
+module.exports = User;
 
 // userSchema.statics.findUser = async function (access_token) {
 //   const data = await GitHub.get_user_from_token(access_token);
