@@ -35,6 +35,7 @@ const GitHub = require("../services/github");
 //return User;
 
 const mongoose = require('mongoose');
+var findOrCreate = require('mongoose-findorcreate')
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
@@ -50,34 +51,24 @@ var UserSchema = new Schema({
   }
 }, { timestamps: true });
 
-
+UserSchema.plugin(findOrCreate);
+ 
 const User = mongoose.model('User', UserSchema);
+
 User.find_or_create_from_token = async (access_token) => {
   const apiUser = await GitHub.get_user_from_token(access_token);
-  // console.log('Github user: ', apiUser);
-  if (apiUser.login) {
-    const mongoUser = await apiUser.findOne(apiUser.login);
-    if (mongoUser)
-      return mongoUser;
+  console.log('Github user: ', apiUser);
+  const [mongoUser] = User.findOrCreate({
+    raw: true,
+    where: { username: apiUser["login"] },
+     defaults: {
+       username: apiUser["login"],
+       avatar_url: apiUser["avatar_url"],
+       github_id: apiUser["id"]
+     }
+   });
 
-    return User.create({
-      username: apiUser["login"],
-      avatar_url: apiUser["avatar_url"],
-      github_id: apiUser["id"]         
-    });
-
-
-   
-  } else {
-    console.log('Bad response from Github')
-  }
-};
+   return mongoUser;
+ };     
 
 module.exports = User;
-
-// userSchema.statics.findUser = async function (access_token) {
-//   const data = await GitHub.get_user_from_token(access_token);
-//   const user = await this.findOne({username, github_id:{}});
-//   return !!user;
-
-// };
