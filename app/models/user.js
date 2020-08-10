@@ -35,6 +35,7 @@ const GitHub = require("../services/github");
 //return User;
 
 const mongoose = require('mongoose');
+const findOrCreate = require('mongoose-findorcreate')
 
 var Schema = mongoose.Schema;
 
@@ -50,6 +51,8 @@ var UserSchema = new Schema({
     location: String
   }
 }, { timestamps: true });
+
+UserSchema.plugin(findOrCreate);
 
 
 const User = mongoose.model('User', UserSchema);
