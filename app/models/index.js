@@ -2,15 +2,15 @@
 // const path = require('path');
 // const Sequelize = require('sequelize');
 
-const fs = require('fs');
-const path = require('path');
-const Mongoose = require('mongoose');
+// const fs = require('fs');
+// const path = require('path');
+// const Mongoose = require('mongoose');
 
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require('../../config/databases.json')[env];
+// const basename = path.basename(__filename);
+// const env = process.env.NODE_ENV || 'development';
+// const config = require('../../config/databases.json')[env];
 
-const db = {};
+// const db = {};
 
 // let sequelize;
 // if (config.use_env_variable) {
