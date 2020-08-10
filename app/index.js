@@ -43,13 +43,3 @@ routes.registerErrorHandlers(app);
 app.listen(config.port, () => {
   console.log(`🚀 Server started on port ${config.port}.`);
 });
-
-// const mongoose = require ('mongoose');
-
-// mongoose.connect('mongodb://localhost/mlh-nodejs-starter');
-
-// mongoose.connection.once('open', function(){
-//     console.log('Connection has been made');
-// }).on('error', function(error){
-//     console.log('Connection error:', error);
-// });
