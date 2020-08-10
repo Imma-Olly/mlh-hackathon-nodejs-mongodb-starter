@@ -1,11 +1,11 @@
-const config = require("../../config");
-const express = require("express");
-const GitHub = require("../services/github");
-const User = require("../models/user");
+const express = require('express');
+const config = require('../../config');
+const GitHub = require('../services/github');
+const User = require('../models/user');
 
 const router = express.Router();
 
-router.get("/logout", function(req, res) {
+router.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/');
 });
@@ -25,7 +25,7 @@ router.get('/callback/github', async (req, res) => {
   const accessToken = await github.getToken(req.query.code);
 
   if (!access_token) {
-    return res.render("404");
+    return res.render('404');
   }
 
   const user = User.find_or_create_from_token(access_token);

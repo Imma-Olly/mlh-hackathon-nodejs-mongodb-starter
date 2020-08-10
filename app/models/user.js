@@ -1,5 +1,3 @@
-const GitHub = require("../services/github");
-
 // module.exports = (sequelize, DataTypes) => {
 //   const User = sequelize.define(
 //     "User",
@@ -11,11 +9,11 @@ const GitHub = require("../services/github");
 //     { sequelize }
 //   );
 
-  // User.associate = function(models) {
-  //   // associations can be defined here
-  // };
+// User.associate = function(models) {
+//   // associations can be defined here
+// };
 
- //User.find_or_create_from_token = async function(access_token) {
+// User.find_or_create_from_token = async function(access_token) {
 //   const data = await GitHub.get_user_from_token(access_token);
 
 //   /* Find existing user or create new User instances */
@@ -32,14 +30,15 @@ const GitHub = require("../services/github");
 //   return instance;
 // };
 
-//return User;
+// return User;
 
 const mongoose = require('mongoose');
-const findOrCreate = require('mongoose-findorcreate')
+const findOrCreate = require('mongoose-findorcreate');
+const GitHub = require('../services/github');
 
-var Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
-var UserSchema = new Schema({
+const UserSchema = new Schema({
   username: { type: String, unique: true },
   avatar_url: String,
   github_id: String,
@@ -48,36 +47,35 @@ var UserSchema = new Schema({
   profile: {
     name: String,
     gender: String,
-    location: String
-  }
+    location: String,
+  },
 }, { timestamps: true });
 
 UserSchema.plugin(findOrCreate);
-
 
 const User = mongoose.model('User', UserSchema);
 
 User.find_or_create_from_token = async (access_token) => {
   const apiUser = await GitHub.get_user_from_token(access_token);
   console.log('Github user: ', apiUser);
-  const mongoUser = function(){
+  const mongoUser = function () {
     User.findOrCreate({
-    raw: true,
-    where: { username: apiUser["login"] },
-     defaults: {
-       username: apiUser["login"],
-       avatar_url: apiUser["avatar_url"],
-       github_id: apiUser["id"]
-     },
-     function(err, user) {
-      if (err) {
-        return done(err);
-    }
-     }
-   });
-  }
+      raw: true,
+      where: { username: apiUser.login },
+      defaults: {
+        username: apiUser.login,
+        avatar_url: apiUser.avatar_url,
+        github_id: apiUser.id,
+      },
+      function(err, user) {
+        if (err) {
+          return done(err);
+        }
+      },
+    });
+  };
 
-   return mongoUser;
- };     
+  return mongoUser;
+};
 
 module.exports = User;
