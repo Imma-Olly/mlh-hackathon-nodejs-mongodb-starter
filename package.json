@@ -4,7 +4,9 @@
   "description": "A hackathon starting point for new Nodejs applications",
   "scripts": {
     "start": "nodemon app/index.js",
-    "deploy": "NODE_ENV=production node app/index.js"
+    "deploy": "NODE_ENV=production node app/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -20,6 +22,9 @@
     "pg-hstore": "^2.3.2"
   },
   "devDependencies": {
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
     "nodemon": "^2.0.4"
   }
 }
