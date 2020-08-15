@@ -4,6 +4,7 @@
   "description": "A hackathon starting point for new Nodejs applications",
   "scripts": {
     "start": "nodemon app/index.js",
+    "inspect": "nodemon --inspect app/index.js",
     "deploy": "NODE_ENV=production node app/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"

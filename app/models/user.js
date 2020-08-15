@@ -55,19 +55,12 @@ UserSchema.plugin(findOrCreate);
 const User = mongoose.model('User', UserSchema);
 
 User.find_or_create_from_token = async (accessToken) => {
-  const apiUser = await GitHub.get_user_from_token(accessToken);
-  console.log('Github user: ', apiUser);
-  const mongoUser = User.findOrCreate(
+  const apiUser = await GitHub.getUserFromToken(accessToken);
+  const mongoUser = await User.findOrCreate(
     { username: apiUser.login },
     { github_id: apiUser.id, avatar_url: apiUser.avatar_url },
-    (err, user) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(user);
-      }
-    },
   );
+  return mongoUser;
 };
 
 module.exports = User;

@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const config = require('../../config');
 const GitHub = require('../services/github');
 const User = require('../models/user');
+const { githubClientId } = require('../../config');
 
 const router = express.Router();
 
@@ -19,7 +21,6 @@ router.get('/callback/github', async (req, res) => {
   if (!req.query.code) {
     return res.render('500');
   }
-
   // Fetch user from GitHub OAuth and store in session
   const github = new GitHub({ clientId: config.githubClientId, clientSecret: config.githubClientSecret });
   const accessToken = await github.getToken(req.query.code);
@@ -28,7 +29,7 @@ router.get('/callback/github', async (req, res) => {
     return res.render('404');
   }
 
-  const user = User.find_or_create_from_token(accessToken);
+  const user = await User.find_or_create_from_token(accessToken);
 
   req.session.access_token = accessToken;
   req.session.user = user;

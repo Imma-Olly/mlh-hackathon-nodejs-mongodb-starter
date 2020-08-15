@@ -23,8 +23,8 @@ class GitHub {
       client_id: this.clientId,
       client_secret: this.clientSecret,
     };
-
     const { data } = await axios.post(tokenUrl, params, config);
+
     return data.access_token;
   }
 
@@ -39,7 +39,7 @@ class GitHub {
   static async getUserFromToken(accessToken) {
     /* Fetch user data using the access token. */
     const url = `${apiUrl}/user`;
-    const config = { params: { accessToken } };
+    const config = { params: { access_token: accessToken } };
 
     const response = await axios.get(url, config);
     return response.data;
