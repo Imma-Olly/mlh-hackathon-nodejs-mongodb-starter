@@ -1,7 +1,7 @@
 /* eslint-disable */
 const Index = () => (
     <div>
-      <p>Hello Next.js, this is your friend Brian from logrocket</p>
+      <p>Hello World!</p>
     </div>
   )
   export default Index;
