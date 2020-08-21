@@ -32,7 +32,10 @@ router.get('/callback/github', async (req, res) => {
   const user = await User.find_or_create_from_token(accessToken);
 
   req.session.access_token = accessToken;
-  req.session.user = user;
+  req.session.user = user.doc;
+
+  console.log("Outputting the req.session\n-------------------------------");
+  console.log(req.session);
 
   return res.redirect('/');
 });
